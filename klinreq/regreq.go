@@ -98,10 +98,16 @@ func SendPayload(i *ReqInfo) (*http.Response, error) {
 			i.Route = "/" + i.Route
 		}
 	}
-	if i.Http {
-		addr = "http://" + i.Dest + ":" + i.Dport + i.Route
+	var string portinfo
+	if i.Dport == "" {
+		portinfo = ""
 	} else {
-		addr = "https://" + i.Dest + ":" + i.Dport + i.Route
+		portinfo = ":" + i.Dport
+	}
+	if i.Http {
+		addr = "http://" + i.Dest + portinfo + i.Route
+	} else {
+		addr = "https://" + i.Dest + portinfo + i.Route
 	}
 	println(addr)
 	var ebody *bytes.Reader
