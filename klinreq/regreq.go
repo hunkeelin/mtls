@@ -109,7 +109,6 @@ func SendPayload(i *ReqInfo) (*http.Response, error) {
 	} else {
 		addr = "https://" + i.Dest + portinfo + i.Route
 	}
-	println(addr)
 	var ebody *bytes.Reader
 	if len(i.BodyBytes) > 0 {
 		ebody = bytes.NewReader(i.BodyBytes)
