@@ -98,7 +98,7 @@ func SendPayload(i *ReqInfo) (*http.Response, error) {
 			i.Route = "/" + i.Route
 		}
 	}
-	var string portinfo
+	var portinfo string
 	if i.Dport == "" {
 		portinfo = ""
 	} else {
