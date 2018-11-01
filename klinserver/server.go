@@ -60,11 +60,21 @@ func listenB(c *ServerConfig) error {
 		tlsconfig.ClientAuth = tls.RequireAndVerifyClientCert
 		tlsconfig.ClientCAs = clientCertPool
 	}
+	var r, w, i int
+	if c.ReadTimeout == 0 {
+		r = 5
+	}
+	if c.WriteTimeout == 0 {
+		w = 10
+	}
+	if c.IdleTimeout == 0 {
+		i = 120
+	}
 	s := &http.Server{
 		Handler:      c.ServeMux,
-		ReadTimeout:  5 * time.Second,
-		WriteTimeout: 10 * time.Second,
-		IdleTimeout:  120 * time.Second,
+		ReadTimeout:  time.Duration(r) * time.Second,
+		WriteTimeout: time.Duration(w) * time.Second,
+		IdleTimeout:  time.Duration(i) * time.Second,
 	}
 	fmt.Println("listening to " + c.BindAddr + ":" + c.BindPort)
 	if c.Https {
@@ -111,13 +121,23 @@ func listen(c *ServerConfig) error {
 		tlsconfig.ClientAuth = tls.RequireAndVerifyClientCert
 		tlsconfig.ClientCAs = clientCertPool
 	}
+	var r, w, i int
+	if c.ReadTimeout == 0 {
+		r = 5
+	}
+	if c.WriteTimeout == 0 {
+		w = 10
+	}
+	if c.IdleTimeout == 0 {
+		i = 120
+	}
 	s := &http.Server{
 		Addr:         c.BindAddr + ":" + c.BindPort,
 		TLSConfig:    tlsconfig,
 		Handler:      c.ServeMux,
-		ReadTimeout:  5 * time.Second,
-		WriteTimeout: 10 * time.Second,
-		IdleTimeout:  120 * time.Second,
+		ReadTimeout:  time.Duration(r) * time.Second,
+		WriteTimeout: time.Duration(w) * time.Second,
+		IdleTimeout:  time.Duration(i) * time.Second,
 	}
 	fmt.Println("listening to " + c.BindAddr + ":" + c.BindPort)
 	if c.Https {

@@ -13,6 +13,11 @@ import (
 
 var json = jsoniter.ConfigCompatibleWithStandardLibrary
 
+func tListen(w http.ResponseWriter, r *http.Request) {
+	fmt.Println(r.URL.Path)
+	w.WriteHeader(400)
+	return
+}
 func (c *conn) notwork(w http.ResponseWriter, r *http.Request, p dowork) {
 	msg := "nothing since it's foo"
 	status := 400

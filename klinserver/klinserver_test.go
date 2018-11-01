@@ -12,6 +12,21 @@ import (
 func mainHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("hello world"))
 }
+func TestHttp(t *testing.T) {
+	con := http.NewServeMux()
+	con.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		tListen(w, r)
+	})
+	j := &ServerConfig{
+		BindPort: "2018",
+		BindAddr: "",
+		ServeMux: con,
+	}
+	err := Server(j)
+	if err != nil {
+		panic(err)
+	}
+}
 func TestBBserver(t *testing.T) {
 	finish := make(chan bool)
 	con := http.NewServeMux()
