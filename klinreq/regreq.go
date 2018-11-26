@@ -110,7 +110,6 @@ func SendPayload(i *ReqInfo) (*http.Response, error) {
 	} else {
 		addr = "https://" + i.Dest + portinfo + i.Route
 	}
-	fmt.Println("sending request to ", addr)
 	var ebody *bytes.Reader
 	if len(i.BodyBytes) > 0 {
 		ebody = bytes.NewReader(i.BodyBytes)
@@ -122,10 +121,12 @@ func SendPayload(i *ReqInfo) (*http.Response, error) {
 		req.Header.Set(k, v)
 	}
 	if err != nil {
+		fmt.Println("new request error")
 		return resp, err
 	}
 	resp, err = client.Do(req)
 	if err != nil {
+		fmt.Println("client do error")
 		return resp, err
 	}
 	return resp, nil
