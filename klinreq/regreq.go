@@ -120,7 +120,6 @@ func SendPayload(i *ReqInfo) (*http.Response, error) {
 	for k, v := range i.Headers {
 		req.Header.Set(k, v)
 	}
-	req.Close = true
 	if err != nil {
 		fmt.Println("new request error")
 		return resp, err
