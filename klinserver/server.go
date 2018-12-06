@@ -5,6 +5,7 @@ import (
 	"crypto/x509"
 	"errors"
 	"fmt"
+	"golang.org/x/net/http2"
 	"io/ioutil"
 	"net/http"
 	"time"
@@ -53,7 +54,8 @@ func listenB(c *ServerConfig) error {
 			tls.CurveP256,
 			tls.X25519,
 		},
-		MinVersion:   tls.VersionTLS12,
+		//MinVersion:   tls.VersionTLS12,
+		NextProtos:   []string{http2.NextProtoTLS},
 		Certificates: certlist,
 	}
 	if c.Verify {

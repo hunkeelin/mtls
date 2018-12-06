@@ -11,6 +11,7 @@ import (
 
 func mainHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("hello world"))
+	fmt.Println(r.Proto)
 }
 func TestHttp(t *testing.T) {
 	con := http.NewServeMux()
@@ -52,6 +53,11 @@ func TestBBserver(t *testing.T) {
 		ServerConfig: j,
 	}
 	err := Inbytes(g)
+	if err != nil {
+		panic(err)
+	}
+	g.ServerConfig = jj
+	err = Inbytes(g)
 	if err != nil {
 		panic(err)
 	}
