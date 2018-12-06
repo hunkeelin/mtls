@@ -4,11 +4,13 @@ import (
 	"bytes"
 	"crypto/tls"
 	"crypto/x509"
-	//"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/json-iterator/go"
+	"golang.org/x/net/http2"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 	"time"
 )
 
@@ -31,6 +33,7 @@ type ReqInfo struct {
 	Payload            interface{}
 	InsecureSkipVerify bool
 	BodyBytes          []byte // raw bytes of the body, will overwrite what' sin payload.
+	HttpVersion        int
 }
 
 // Send a json payload. payload should be a struct where you define your json
@@ -80,9 +83,21 @@ func SendPayload(i *ReqInfo) (*http.Response, error) {
 	if len(i.TrustBytes) != 0 {
 		tlsConfig.RootCAs = clientCertPool
 	}
-	tr := &http.Transport{TLSClientConfig: tlsConfig}
-	client := &http.Client{
-		Transport: tr,
+	client := &http.Client{}
+	if i.HttpVersion == 0 {
+		i.HttpVersion = 2
+	}
+	switch i.HttpVersion {
+	case 1:
+		client.Transport = &http.Transport{
+			TLSClientConfig: tlsConfig,
+		}
+	case 2:
+		client.Transport = &http2.Transport{
+			TLSClientConfig: tlsConfig,
+		}
+	default:
+		return resp, errors.New("Wrong https version please specify 1 or 2 you specified" + strconv.Itoa(i.HttpVersion))
 	}
 	if i.TimeOut == 0 {
 		client.Timeout = time.Duration(20000) * time.Millisecond

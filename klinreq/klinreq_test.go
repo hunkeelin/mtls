@@ -19,6 +19,32 @@ type filejson struct {
 	FileName  string `json:"filename"`
 }
 
+func TestProtoreq(t *testing.T) {
+	fmt.Println("testing inbytes")
+	payload := &testPayload{
+		C: "wt",
+		D: true,
+	}
+	i := &ReqInfo{
+		Dest:               "test1.klin-pro.com",
+		Dport:              "2018",
+		Method:             "POST",
+		Route:              "foo",
+		Payload:            payload,
+		InsecureSkipVerify: true,
+		HttpVersion:        1,
+	}
+	resp, err := SendPayload(i)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(string(body), string(resp.Status))
+}
 func TestReq(t *testing.T) {
 	fmt.Println("testing req")
 	payload := &testPayload{
@@ -128,7 +154,7 @@ func TestBreq(t *testing.T) {
 	i := &ReqInfo{
 		CertBytes: cb,
 		KeyBytes:  kb,
-		Dest:      "test3.klin-pro.com",
+		Dest:      "test1.klin-pro.com",
 		Dport:     "2018",
 		//		Trust:     "program/intermca.crt",
 		TrustBytes: b,
