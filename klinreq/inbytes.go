@@ -14,6 +14,7 @@ type InbytesForm struct {
 	ReqInfo   *ReqInfo // the reqinfo that will get modified.
 	Org       string   // the org name for csr
 	Rootca    string
+	SignCA    string
 }
 
 func Inbytes(in InbytesForm) error {
@@ -45,6 +46,7 @@ func Inbytes(in InbytesForm) error {
 			RsaBits:      2048,
 			Organization: in.Org,
 		},
+		SignCA: in.SignCA,
 	}
 	cb, kb, err := client.Getkeycrtbyte(w)
 	if err != nil {
