@@ -65,12 +65,18 @@ func listenB(c *ServerConfig) error {
 	var r, w, i int
 	if c.ReadTimeout == 0 {
 		r = 5
+	} else {
+		r = c.ReadTimeout
 	}
 	if c.WriteTimeout == 0 {
 		w = 10
+	} else {
+		w = c.WriteTimeout
 	}
 	if c.IdleTimeout == 0 {
 		i = 120
+	} else {
+		i = c.IdleTimeout
 	}
 	s := &http.Server{
 		Handler:      c.ServeMux,
@@ -126,12 +132,18 @@ func listen(c *ServerConfig) error {
 	var r, w, i int
 	if c.ReadTimeout == 0 {
 		r = 5
+	} else {
+		r = c.ReadTimeout
 	}
 	if c.WriteTimeout == 0 {
 		w = 10
+	} else {
+		w = c.WriteTimeout
 	}
 	if c.IdleTimeout == 0 {
 		i = 120
+	} else {
+		i = c.IdleTimeout
 	}
 	s := &http.Server{
 		Addr:         c.BindAddr + ":" + c.BindPort,
