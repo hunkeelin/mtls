@@ -108,9 +108,9 @@ func SendPayload(i *ReqInfo) (*http.Response, error) {
 	}
 	var encodepayload []byte
 	if i.Xml {
-		encodepayload, err := xml.Marshal(i.Payload)
+		encodepayload, err = xml.Marshal(i.Payload)
 	} else {
-		encodepayload, err := json.Marshal(i.Payload)
+		encodepayload, err = json.Marshal(i.Payload)
 	}
 	if err != nil {
 		panic(err)
