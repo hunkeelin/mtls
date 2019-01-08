@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"crypto/tls"
 	"crypto/x509"
+	"encoding/xml"
 	"errors"
 	"fmt"
 	"github.com/json-iterator/go"
@@ -31,6 +32,7 @@ type ReqInfo struct {
 	Headers            map[string]string
 	ExtraParams        map[string]string
 	Payload            interface{}
+	Xml                bool
 	InsecureSkipVerify bool
 	BodyBytes          []byte // raw bytes of the body, will overwrite what' sin payload.
 	HttpVersion        int
@@ -104,7 +106,12 @@ func SendPayload(i *ReqInfo) (*http.Response, error) {
 	} else {
 		client.Timeout = time.Duration(i.TimeOut) * time.Millisecond
 	}
-	encodepayload, err := json.Marshal(i.Payload)
+	var encodepayload []byte
+	if i.Xml {
+		encodepayload, err := xml.Marshal(i.Payload)
+	} else {
+		encodepayload, err := json.Marshal(i.Payload)
+	}
 	if err != nil {
 		panic(err)
 	}
