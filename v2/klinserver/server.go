@@ -75,6 +75,7 @@ func listenB(c *ServerConfig) error {
 	}
 	fmt.Println("listening to " + c.BindAddr + ":" + c.BindPort)
 	if c.Https {
+		tlsconfig.BuildNameToCertificate()
 		l, err := tls.Listen("tcp", c.BindAddr+":"+c.BindPort, tlsconfig)
 		if err != nil {
 			return errors.New("unable to listen to port and address")
