@@ -88,7 +88,7 @@ func TestInbytes(t *testing.T) {
 		D: true,
 	}
 	i := &ReqInfo{
-		Dest:  "test3.klin-pro.com",
+		Dest:  "test1.klin-pro.com",
 		Dport: "2018",
 		//		Trust:     "program/intermca.crt",
 		Method:  "POST",
@@ -101,9 +101,10 @@ func TestInbytes(t *testing.T) {
 	}
 	f := InbytesForm{
 		Ca:        "util3.klin-pro.com",
-		Caport:    "2018",
+		Caport:    klinutils.Stringtoport("superca"),
 		Trustcert: "intermca.crt",
 		Rootca:    "rootca.crt",
+		Org:       "klin-pro",
 		ReqInfo:   i,
 	}
 	err := Inbytes(f)

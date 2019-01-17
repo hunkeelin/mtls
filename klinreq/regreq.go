@@ -36,10 +36,19 @@ type ReqInfo struct {
 	InsecureSkipVerify bool
 	BodyBytes          []byte // raw bytes of the body, will overwrite what' sin payload.
 	HttpVersion        int
+	Rawreq             *http.Request
 }
 
 // Send a json payload. payload should be a struct where you define your json
 func SendPayload(i *ReqInfo) (*http.Response, error) {
+	client := &http.Client{}
+	if i.Rawreq != nil {
+		resp, err := client.Do(i.Rawreq)
+		if err != nil {
+			return resp, fmt.Errorf("Client do error pkg-klinreq %v", err)
+		}
+		return resp, nil
+	}
 	var json = jsoniter.ConfigCompatibleWithStandardLibrary
 	var resp *http.Response
 	var cert tls.Certificate
@@ -85,7 +94,6 @@ func SendPayload(i *ReqInfo) (*http.Response, error) {
 	if len(i.TrustBytes) != 0 {
 		tlsConfig.RootCAs = clientCertPool
 	}
-	client := &http.Client{}
 	if i.HttpVersion == 0 {
 		i.HttpVersion = 2
 	}
@@ -139,17 +147,15 @@ func SendPayload(i *ReqInfo) (*http.Response, error) {
 		ebody = bytes.NewReader(encodepayload)
 	}
 	req, err := http.NewRequest(i.Method, addr, ebody)
+	if err != nil {
+		return resp, fmt.Errorf("Error making new request pkg-klinreq%v", err)
+	}
 	for k, v := range i.Headers {
 		req.Header.Set(k, v)
 	}
-	if err != nil {
-		fmt.Println("new request error")
-		return resp, err
-	}
 	resp, err = client.Do(req)
 	if err != nil {
-		fmt.Println("client do error")
-		return resp, err
+		return resp, fmt.Errorf("client do error pkg-klinreq%v", err)
 	}
 	return resp, nil
 }
