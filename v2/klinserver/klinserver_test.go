@@ -13,29 +13,30 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.Proto)
 }
 func TestSserver(t *testing.T) {
+	fmt.Println("testing sni")
 	con := http.NewServeMux()
 	con.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		mainHandler(w, r)
 	})
 	var certs, keys [][]byte
-	t1c, err := ioutil.ReadFile("/tmp/t1.crt")
+	t1c, err := ioutil.ReadFile("/tmp/test2.klin-pro.com.crt")
 	if err != nil {
 		panic(err)
 	}
-	t1k, err := ioutil.ReadFile("/tmp/t1.key")
+	t1k, err := ioutil.ReadFile("/tmp/test2.klin-pro.com.key")
 	if err != nil {
 		panic(err)
 	}
-	t2c, err := ioutil.ReadFile("/tmp/t2.crt")
+	t2c, err := ioutil.ReadFile("/tmp/test1.klin-pro.com.crt")
 	if err != nil {
 		panic(err)
 	}
-	t2k, err := ioutil.ReadFile("/tmp/t2.key")
+	t2k, err := ioutil.ReadFile("/tmp/test1.klin-pro.com.key")
 	if err != nil {
 		panic(err)
 	}
-	certs = append(certs, t2c, t1c)
-	keys = append(keys, t2k, t1k)
+	certs = append(certs, t1c, t2c)
+	keys = append(keys, t1k, t2k)
 	j := &ServerConfig{
 		BindPort:  "2018",
 		BindAddr:  "",
@@ -43,6 +44,12 @@ func TestSserver(t *testing.T) {
 		Https:     true,
 		CertBytes: certs,
 		KeyBytes:  keys,
+		Name2cert: map[string]Keycrt{
+			"test1": Keycrt{
+				Cb: t2c,
+				Kb: t2k,
+			},
+		},
 	}
 	panic(Server(j))
 }

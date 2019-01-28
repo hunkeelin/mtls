@@ -4,6 +4,9 @@ import (
 	"net/http"
 )
 
+type Keycrt struct {
+	Cb, Kb []byte
+}
 type ServerConfig struct {
 	BindAddr     string
 	BindPort     string
@@ -18,5 +21,6 @@ type ServerConfig struct {
 	ReadTimeout  int
 	WriteTimeout int
 	IdleTimeout  int
-	ServeMux     *http.ServeMux // the http.ServeMux
+	ServeMux     *http.ServeMux    // the http.ServeMux
+	Name2cert    map[string]Keycrt // key == hostname, value == cert in bytes
 }
