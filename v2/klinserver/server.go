@@ -75,17 +75,22 @@ func listenB(c *ServerConfig) error {
 	}
 	fmt.Println("listening to " + c.BindAddr + ":" + c.BindPort)
 	if c.Https {
-		if c.Name2cert == nil {
-			tlsconfig.BuildNameToCertificate()
-		} else {
-			tlsconfig.NameToCertificate = make(map[string]*tls.Certificate)
+		tlsconfig.BuildNameToCertificate()
+		if c.Name2cert != nil {
 			for hostname, keycrt := range c.Name2cert {
 				keycerts, err := tls.X509KeyPair(keycrt.Cb, keycrt.Kb)
 				if err != nil {
 					return fmt.Errorf("Unable to loadkeypair for name2cert %v", err)
 				}
-				tlsconfig.NameToCertificate[hostname] = &keycerts
-				tlsconfig.Certificates = append(tlsconfig.Certificates, keycerts)
+				// if key does have a value already
+				if _, haveVal := tlsconfig.NameToCertificate[hostname]; haveVal {
+					if c.SNIoverride {
+						tlsconfig.NameToCertificate[hostname] = &keycerts
+						tlsconfig.Certificates = append(tlsconfig.Certificates, keycerts)
+					} else {
+						return fmt.Errorf("Overiding an sni existing key value " + hostname + " if you are sure what you are doing enable SNIoverride")
+					}
+				}
 			}
 		}
 		l, err := tls.Listen("tcp", c.BindAddr+":"+c.BindPort, tlsconfig)

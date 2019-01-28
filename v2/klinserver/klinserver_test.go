@@ -19,19 +19,19 @@ func TestSserver(t *testing.T) {
 		mainHandler(w, r)
 	})
 	var certs, keys [][]byte
-	t1c, err := ioutil.ReadFile("/tmp/test2.klin-pro.com.crt")
+	t2c, err := ioutil.ReadFile("/tmp/test2.klin-pro.com.crt")
 	if err != nil {
 		panic(err)
 	}
-	t1k, err := ioutil.ReadFile("/tmp/test2.klin-pro.com.key")
+	t2k, err := ioutil.ReadFile("/tmp/test2.klin-pro.com.key")
 	if err != nil {
 		panic(err)
 	}
-	t2c, err := ioutil.ReadFile("/tmp/test1.klin-pro.com.crt")
+	t1c, err := ioutil.ReadFile("/tmp/test1.klin-pro.com.crt")
 	if err != nil {
 		panic(err)
 	}
-	t2k, err := ioutil.ReadFile("/tmp/test1.klin-pro.com.key")
+	t1k, err := ioutil.ReadFile("/tmp/test1.klin-pro.com.key")
 	if err != nil {
 		panic(err)
 	}
@@ -45,11 +45,16 @@ func TestSserver(t *testing.T) {
 		CertBytes: certs,
 		KeyBytes:  keys,
 		Name2cert: map[string]Keycrt{
-			"test1": Keycrt{
+			"test1.klin-pro.com": Keycrt{
 				Cb: t2c,
 				Kb: t2k,
 			},
+			"test2.klin-pro.com": Keycrt{
+				Cb: t1c,
+				Kb: t1k,
+			},
 		},
+		SNIoverride: true,
 	}
 	panic(Server(j))
 }
