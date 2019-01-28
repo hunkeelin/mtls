@@ -3,7 +3,6 @@ package klinserver
 import (
 	"crypto/tls"
 	"crypto/x509"
-	"errors"
 	"fmt"
 	"golang.org/x/net/http2"
 	"net/http"
@@ -12,7 +11,7 @@ import (
 
 func Server(c *ServerConfig) error {
 	if c.CertBytes == nil || c.KeyBytes == nil || len(c.KeyBytes) != len(c.CertBytes) {
-		return errors.New("crt,key incomplete, either you didn't provide them or the number of key and cert doesn't match")
+		return fmt.Errorf("crt,key incomplete, either you didn't provide them or the number of key and cert doesn't match")
 	}
 	return listenB(c)
 }
@@ -32,7 +31,7 @@ func listenB(c *ServerConfig) error {
 		for i, _ := range c.CertBytes {
 			keycerts, err := tls.X509KeyPair(c.CertBytes[i], c.KeyBytes[i])
 			if err != nil {
-				return errors.New("certbytes and keybytes doesn't match")
+				return fmt.Errorf("certbytes and keybytes doesn't match %v", err)
 			}
 			certlist = append(certlist, keycerts)
 		}
@@ -45,7 +44,7 @@ func listenB(c *ServerConfig) error {
 		trustlist := c.TrustBytes
 		for _, trustca := range trustlist {
 			if ok := clientCertPool.AppendCertsFromPEM(trustca); !ok {
-				return errors.New("unable to append certbytes")
+				return fmt.Errorf("unable to append certbytes")
 			}
 		}
 		tlsconfig.ClientAuth = tls.RequireAndVerifyClientCert
@@ -80,7 +79,7 @@ func listenB(c *ServerConfig) error {
 			for hostname, keycrt := range c.Name2cert {
 				keycerts, err := tls.X509KeyPair(keycrt.Cb, keycrt.Kb)
 				if err != nil {
-					return fmt.Errorf("Unable to loadkeypair for name2cert %v", err)
+					return fmt.Errorf("Unable to loadkeypair for name2cert key value of "+hostname+"%v", err)
 				}
 				// if key does have a value already
 				if _, haveVal := tlsconfig.NameToCertificate[hostname]; haveVal {
@@ -95,17 +94,17 @@ func listenB(c *ServerConfig) error {
 		}
 		l, err := tls.Listen("tcp", c.BindAddr+":"+c.BindPort, tlsconfig)
 		if err != nil {
-			return errors.New("unable to listen to port and address")
+			return fmt.Errorf("unable to listen to port and address %v", err)
 		}
 		err = s.Serve(l)
 		if err != nil {
-			return errors.New("unable to serve https")
+			return fmt.Errorf("unable to serve https %v", err)
 		}
 	} else {
 		s.Addr = c.BindAddr + ":" + c.BindPort
 		err = s.ListenAndServe()
 		if err != nil {
-			return errors.New("unable to serve http")
+			return fmt.Errorf("unable to serve http %v", err)
 		}
 	}
 	return err
