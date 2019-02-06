@@ -10,8 +10,10 @@ import (
 )
 
 func Server(c *ServerConfig) error {
-	if c.CertBytes == nil || c.KeyBytes == nil || len(c.KeyBytes) != len(c.CertBytes) {
-		return fmt.Errorf("crt,key incomplete, either you didn't provide them or the number of key and cert doesn't match")
+	if c.Https {
+		if c.CertBytes == nil || c.KeyBytes == nil || len(c.KeyBytes) != len(c.CertBytes) {
+			return fmt.Errorf("crt,key incomplete, either you didn't provide them or the number of key and cert doesn't match")
+		}
 	}
 	return listenB(c)
 }

@@ -38,10 +38,10 @@ func TestSserver(t *testing.T) {
 	certs = append(certs, t1c, t2c)
 	keys = append(keys, t1k, t2k)
 	j := &ServerConfig{
-		BindPort:  "2018",
-		BindAddr:  "",
-		ServeMux:  con,
-		Https:     true,
+		BindPort: "2018",
+		BindAddr: "",
+		ServeMux: con,
+		//	Https:     true,
 		CertBytes: certs,
 		KeyBytes:  keys,
 		Name2cert: map[string]Keycrt{
