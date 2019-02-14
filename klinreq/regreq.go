@@ -100,16 +100,17 @@ func SendPayload(i *ReqInfo) (*http.Response, error) {
 	switch i.HttpVersion {
 	case 1:
 		client.Transport = &http.Transport{
-			TLSClientConfig: tlsConfig,
+			TLSClientConfig:    tlsConfig,
+			DisableCompression: true,
 		}
 	case 2:
 		client.Transport = &http2.Transport{
-			TLSClientConfig: tlsConfig,
+			TLSClientConfig:    tlsConfig,
+			DisableCompression: true,
 		}
 	default:
 		return resp, errors.New("Wrong https version please specify 1 or 2 you specified" + strconv.Itoa(i.HttpVersion))
 	}
-	client.Transport.DisableCompression = true
 	if i.TimeOut == 0 {
 		client.Timeout = time.Duration(20000) * time.Millisecond
 	} else {
