@@ -153,6 +153,7 @@ func SendPayload(i *ReqInfo) (*http.Response, error) {
 	for k, v := range i.Headers {
 		req.Header.Set(k, v)
 	}
+	req.Header.Del("Accept-Encoding")
 	resp, err = client.Do(req)
 	if err != nil {
 		return resp, fmt.Errorf("client do error pkg-klinreq%v", err)
