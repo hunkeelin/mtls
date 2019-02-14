@@ -109,6 +109,7 @@ func SendPayload(i *ReqInfo) (*http.Response, error) {
 	default:
 		return resp, errors.New("Wrong https version please specify 1 or 2 you specified" + strconv.Itoa(i.HttpVersion))
 	}
+	client.Transport.DisableCompression = true
 	if i.TimeOut == 0 {
 		client.Timeout = time.Duration(20000) * time.Millisecond
 	} else {
@@ -153,7 +154,6 @@ func SendPayload(i *ReqInfo) (*http.Response, error) {
 	for k, v := range i.Headers {
 		req.Header.Set(k, v)
 	}
-	req.Header.Del("Accept-Encoding")
 	resp, err = client.Do(req)
 	if err != nil {
 		return resp, fmt.Errorf("client do error pkg-klinreq%v", err)
