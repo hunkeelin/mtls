@@ -103,16 +103,17 @@ func SendPayload(i *ReqInfo) (*http.Response, error) {
 	switch i.HttpVersion {
 	case 1:
 		client.Transport = &http.Transport{
+			Proxy:           http.ProxyFromEnvironment,
 			TLSClientConfig: tlsConfig,
 		}
 	case 2:
 		client.Transport = &http2.Transport{
+			Proxy:           http.ProxyFromEnvironment,
 			TLSClientConfig: tlsConfig,
 		}
 	default:
 		return resp, errors.New("Wrong https version please specify 1 or 2 you specified" + strconv.Itoa(i.HttpVersion))
 	}
-	client.Transport.Proxy = http.ProxyFromEnvironment
 	if i.TimeOut == 0 {
 		client.Timeout = time.Duration(20000) * time.Millisecond
 	} else {
