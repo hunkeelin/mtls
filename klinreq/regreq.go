@@ -36,12 +36,15 @@ type ReqInfo struct {
 	InsecureSkipVerify bool
 	BodyBytes          []byte // raw bytes of the body, will overwrite what' sin payload.
 	HttpVersion        int
+	CookieJar          http.CookieJar
 	Rawreq             *http.Request
 }
 
 // Send a json payload. payload should be a struct where you define your json
 func SendPayload(i *ReqInfo) (*http.Response, error) {
-	client := &http.Client{}
+	client := &http.Client{
+		Jar: i.CookieJar,
+	}
 	if i.Rawreq != nil {
 		resp, err := client.Do(i.Rawreq)
 		if err != nil {
@@ -109,6 +112,7 @@ func SendPayload(i *ReqInfo) (*http.Response, error) {
 	default:
 		return resp, errors.New("Wrong https version please specify 1 or 2 you specified" + strconv.Itoa(i.HttpVersion))
 	}
+	client.Transport.Proxy = http.ProxyFromEnvironment
 	if i.TimeOut == 0 {
 		client.Timeout = time.Duration(20000) * time.Millisecond
 	} else {
