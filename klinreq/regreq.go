@@ -108,7 +108,6 @@ func SendPayload(i *ReqInfo) (*http.Response, error) {
 		}
 	case 2:
 		client.Transport = &http2.Transport{
-			Proxy:           http.ProxyFromEnvironment,
 			TLSClientConfig: tlsConfig,
 		}
 	default:
