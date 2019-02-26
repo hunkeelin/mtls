@@ -42,9 +42,23 @@ type ReqInfo struct {
 
 // Send a json payload. payload should be a struct where you define your json
 func SendPayload(i *ReqInfo) (*http.Response, error) {
+	// Initialization
+	var (
+		json          = jsoniter.ConfigCompatibleWithStandardLibrary
+		resp          *http.Response
+		cert          tls.Certificate
+		certlist      []tls.Certificate
+		err           error
+		encodepayload []byte
+		clientCACert  []byte
+		addr          string
+		portinfo      string
+		ebody         *bytes.Reader
+	)
 	client := &http.Client{
 		Jar: i.CookieJar,
 	}
+
 	if i.Rawreq != nil {
 		resp, err := client.Do(i.Rawreq)
 		if err != nil {
@@ -52,17 +66,14 @@ func SendPayload(i *ReqInfo) (*http.Response, error) {
 		}
 		return resp, nil
 	}
-	var json = jsoniter.ConfigCompatibleWithStandardLibrary
-	var resp *http.Response
-	var cert tls.Certificate
-	var certlist []tls.Certificate
-	var err error
+
 	if i.Cert != "" && i.Key != "" {
 		cert, err = tls.LoadX509KeyPair(i.Cert, i.Key)
 		if err != nil {
 			return resp, err
 		}
 	}
+
 	if len(i.CertBytes) != 0 && len(i.KeyBytes) != 0 {
 		cert, err = tls.X509KeyPair(i.CertBytes, i.KeyBytes)
 		if err != nil {
@@ -72,9 +83,7 @@ func SendPayload(i *ReqInfo) (*http.Response, error) {
 	certlist = append(certlist, cert)
 
 	// Load our CA certificate
-	var clientCACert []byte
 	if i.Trust != "" {
-		var err error
 		clientCACert, err = ioutil.ReadFile(i.Trust)
 		if err != nil {
 			return resp, err
@@ -118,22 +127,16 @@ func SendPayload(i *ReqInfo) (*http.Response, error) {
 	} else {
 		client.Timeout = time.Duration(i.TimeOut) * time.Millisecond
 	}
-	var encodepayload []byte
 	if i.Xml {
 		encodepayload, err = xml.Marshal(i.Payload)
 	} else {
 		encodepayload, err = json.Marshal(i.Payload)
 	}
-	if err != nil {
-		panic(err)
-	}
-	var addr string
 	if len(i.Route) > 0 {
 		if string(i.Route[0]) != "/" {
 			i.Route = "/" + i.Route
 		}
 	}
-	var portinfo string
 	if i.Dport == "" {
 		portinfo = ""
 	} else {
@@ -144,7 +147,6 @@ func SendPayload(i *ReqInfo) (*http.Response, error) {
 	} else {
 		addr = "https://" + i.Dest + portinfo + i.Route
 	}
-	var ebody *bytes.Reader
 	if len(i.BodyBytes) > 0 {
 		ebody = bytes.NewReader(i.BodyBytes)
 	} else {
