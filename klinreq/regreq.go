@@ -27,10 +27,8 @@ type ReqInfo struct {
 	TrustBytes         []byte
 	Method             string // The req method, POST/PATCH etc...
 	Route              string // The route, by default its "/" it can be "/api"
-	File               string // If you are sending file specify the file you are sending.
 	Http               bool
 	Headers            map[string]string
-	ExtraParams        map[string]string
 	Payload            interface{}
 	Xml                bool
 	InsecureSkipVerify bool
