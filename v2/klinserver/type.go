@@ -21,7 +21,7 @@ type ServerConfig struct {
 	ReadTimeout  int
 	WriteTimeout int
 	IdleTimeout  int
-	ServeMux     *http.ServeMux    // the http.ServeMux
+	ServeMux     http.Handler      // the http.ServeMux
 	Name2cert    map[string]Keycrt // key == hostname, value == cert in bytes
 	SNIoverride  bool              // whether to override the sni from name2cert.
 }
