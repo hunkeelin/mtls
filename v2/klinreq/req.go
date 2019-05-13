@@ -9,19 +9,19 @@ import (
 )
 
 func (r *ReqBuilder) SetUrl(u string) *ReqBuilder {
-	r.reqQ.Url = &u
+	r.ReqQ.Url = &u
 	return r
 }
 func (r *ReqBuilder) SetHeaders(h map[string]string) *ReqBuilder {
-	r.reqQ.Headers = h
+	r.ReqQ.Headers = h
 	return r
 }
 func (r *ReqBuilder) SetMethod(m string) *ReqBuilder {
-	r.reqQ.Method = &m
+	r.ReqQ.Method = &m
 	return r
 }
 func (r *ReqBuilder) SetJson(j interface{}) *ReqBuilder {
-	r.reqQ.Json = &j
+	r.ReqQ.Json = &j
 	return r
 }
 func (r *ReqBuilder) Do() (*http.Response, error) {
@@ -36,19 +36,19 @@ func (r *ReqBuilder) Do() (*http.Response, error) {
 	}
 
 	if r.Json != nil {
-		eJson, err := json.Marshal(*r.reqQ.Json)
+		eJson, err := json.Marshal(*r.ReqQ.Json)
 		if err != nil {
 			return h, err
 		}
 		ebody = bytes.NewReader(eJson)
 	}
-	req, err := http.NewRequest(*r.reqQ.Method, *r.reqQ.Url, ebody)
+	req, err := http.NewRequest(*r.ReqQ.Method, *r.ReqQ.Url, ebody)
 	if err != nil {
 		return h, err
 	}
 
-	if r.reqQ.Headers != nil {
-		for k, v := range r.reqQ.Headers {
+	if r.ReqQ.Headers != nil {
+		for k, v := range r.ReqQ.Headers {
 			req.Header.Set(k, v)
 		}
 	}
@@ -62,17 +62,17 @@ func (r *ReqBuilder) Do() (*http.Response, error) {
 
 func (r *ReqBuilder) _check() error {
 	// make GET as default
-	if r.reqQ.Method == nil {
+	if r.ReqQ.Method == nil {
 		method := "GET"
-		r.reqQ.Method = &method
+		r.ReqQ.Method = &method
 	}
 
 	// check if url is valid
-	_, err := url.ParseRequestURI(*r.reqQ.Url)
+	_, err := url.ParseRequestURI(*r.ReqQ.Url)
 	if err != nil {
 		return err
 	}
-	if r.reqQ.Url == nil {
+	if r.ReqQ.Url == nil {
 		return fmt.Errorf("url not valid")
 	}
 	return nil
