@@ -8,23 +8,23 @@ import (
 	"net/url"
 )
 
-func (r *reqBuilder) SetUrl(u string) *reqBuilder {
+func (r *ReqBuilder) SetUrl(u string) *ReqBuilder {
 	r.reqQ.Url = &u
 	return r
 }
-func (r *reqBuilder) SetHeaders(h map[string]string) *reqBuilder {
+func (r *ReqBuilder) SetHeaders(h map[string]string) *ReqBuilder {
 	r.reqQ.Headers = h
 	return r
 }
-func (r *reqBuilder) SetMethod(m string) *reqBuilder {
+func (r *ReqBuilder) SetMethod(m string) *ReqBuilder {
 	r.reqQ.Method = &m
 	return r
 }
-func (r *reqBuilder) SetJson(j interface{}) *reqBuilder {
+func (r *ReqBuilder) SetJson(j interface{}) *ReqBuilder {
 	r.reqQ.Json = &j
 	return r
 }
-func (r *reqBuilder) Do() (*http.Response, error) {
+func (r *ReqBuilder) Do() (*http.Response, error) {
 	var (
 		h     *http.Response
 		ebody *bytes.Reader
@@ -60,7 +60,7 @@ func (r *reqBuilder) Do() (*http.Response, error) {
 	return h, nil
 }
 
-func (r *reqBuilder) _check() error {
+func (r *ReqBuilder) _check() error {
 	// make GET as default
 	if r.reqQ.Method == nil {
 		method := "GET"
