@@ -1,11 +1,11 @@
 package klinreq
 
-type reqQ struct {
+type ReqQ struct {
 	Url     *string
 	Headers map[string]string
 	Method  *string
 	Json    *interface{}
 }
-type reqBuilder struct {
-	reqQ
+type ReqBuilder struct {
+	ReqQ
 }

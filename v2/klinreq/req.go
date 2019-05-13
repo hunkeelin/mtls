@@ -8,23 +8,23 @@ import (
 	"net/url"
 )
 
-func (r *reqBuilder) setUrl(u string) *reqBuilder {
+func (r *reqBuilder) SetUrl(u string) *reqBuilder {
 	r.reqQ.Url = &u
 	return r
 }
-func (r *reqBuilder) setHeaders(h map[string]string) *reqBuilder {
+func (r *reqBuilder) SetHeaders(h map[string]string) *reqBuilder {
 	r.reqQ.Headers = h
 	return r
 }
-func (r *reqBuilder) setMethod(m string) *reqBuilder {
+func (r *reqBuilder) SetMethod(m string) *reqBuilder {
 	r.reqQ.Method = &m
 	return r
 }
-func (r *reqBuilder) setJson(j interface{}) *reqBuilder {
+func (r *reqBuilder) SetJson(j interface{}) *reqBuilder {
 	r.reqQ.Json = &j
 	return r
 }
-func (r *reqBuilder) do() (*http.Response, error) {
+func (r *reqBuilder) Do() (*http.Response, error) {
 	var (
 		h     *http.Response
 		ebody *bytes.Reader
