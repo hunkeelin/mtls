@@ -20,6 +20,10 @@ func (r *ReqBuilder) SetMethod(m string) *ReqBuilder {
 	r.ReqQ.Method = &m
 	return r
 }
+func (r *ReqBuilder) NoVerify() *ReqBuilder {
+	r.ReqQ.NoVerify = true
+	return r
+}
 func (r *ReqBuilder) SetJson(j interface{}) *ReqBuilder {
 	r.ReqQ.Json = &j
 	return r
@@ -29,7 +33,8 @@ func (r *ReqBuilder) Do() (*http.Response, error) {
 		h     *http.Response
 		ebody *bytes.Reader
 	)
-
+	tlsConfig := &tls.Config{}
+	tlsConfig.InsecureSkipVerify = r.ReqQ.NoVerifiy
 	err := r._check()
 	if err != nil {
 		return h, err
@@ -53,6 +58,9 @@ func (r *ReqBuilder) Do() (*http.Response, error) {
 		}
 	}
 	client := &http.Client{}
+	client.Transport = &http.Transport{
+		TLSClientConfig: tlsConfig,
+	}
 	h, err = client.Do(req)
 	if err != nil {
 		return h, err
