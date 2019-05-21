@@ -35,7 +35,7 @@ func (r *ReqBuilder) Do() (*http.Response, error) {
 		ebody *bytes.Reader
 	)
 	tlsConfig := &tls.Config{}
-	tlsConfig.InsecureSkipVerify = r.ReqQ.NoVerifiy
+	tlsConfig.InsecureSkipVerify = r.ReqQ.NoVerify
 	err := r._check()
 	if err != nil {
 		return h, err
