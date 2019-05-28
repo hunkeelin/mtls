@@ -40,15 +40,17 @@ func (r *ReqBuilder) Do() (*http.Response, error) {
 	if err != nil {
 		return h, err
 	}
-
+	// check if json exist
 	if r.Json != nil {
 		eJson, err := json.Marshal(*r.ReqQ.Json)
 		if err != nil {
 			return h, err
 		}
 		ebody = bytes.NewReader(eJson)
+	} else {
+		ebody = bytes.NewReader([]byte(""))
 	}
-	req, err := http.NewRequest(*r.ReqQ.Method, *r.ReqQ.Url, nil)
+	req, err := http.NewRequest(*r.ReqQ.Method, *r.ReqQ.Url, ebody)
 	if err != nil {
 		return h, err
 	}
