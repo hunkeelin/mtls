@@ -48,10 +48,7 @@ func (r *ReqBuilder) Do() (*http.Response, error) {
 		}
 		ebody = bytes.NewReader(eJson)
 	}
-	if ebody == nil {
-		ebody = []byte("")
-	}
-	req, err := http.NewRequest(*r.ReqQ.Method, *r.ReqQ.Url, ebody)
+	req, err := http.NewRequest(*r.ReqQ.Method, *r.ReqQ.Url, nil)
 	if err != nil {
 		return h, err
 	}
