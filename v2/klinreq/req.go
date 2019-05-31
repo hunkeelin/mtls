@@ -48,6 +48,8 @@ func (r *ReqBuilder) Do() (*http.Response, error) {
 	var client *http.Client
 	if r.ReqQ.Client == nil {
 		client = &http.Client{}
+	} else {
+		client = r.ReqQ.Client
 	}
 	var (
 		h     *http.Response
