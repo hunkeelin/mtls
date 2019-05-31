@@ -28,7 +28,7 @@ func (r *ReqBuilder) SetHeaders(h map[string]string) *ReqBuilder {
 	return r
 }
 func (r *ReqBuilder) SetTimeOut(h int) *ReqBuilder {
-	r.ReqQ.Headers = h
+	r.ReqQ.Client.Timeout = h
 	return r
 }
 func (r *ReqBuilder) SetMethod(m string) *ReqBuilder {
