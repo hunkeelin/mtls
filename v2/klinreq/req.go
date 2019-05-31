@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"time"
 )
 
 func New() ReqBuilder {
@@ -28,7 +29,7 @@ func (r *ReqBuilder) SetHeaders(h map[string]string) *ReqBuilder {
 	return r
 }
 func (r *ReqBuilder) SetTimeOut(h int) *ReqBuilder {
-	r.ReqQ.Client.Timeout = h
+	r.ReqQ.Client.Timeout = time.Duration(h) * time.Second
 	return r
 }
 func (r *ReqBuilder) SetMethod(m string) *ReqBuilder {
