@@ -9,11 +9,25 @@ import (
 	"net/url"
 )
 
+func New() ReqBuilder {
+	client := &http.Client{}
+	r := ReqQ{
+		Client: client,
+	}
+
+	return ReqBuilder{
+		ReqQ: r,
+	}
+}
 func (r *ReqBuilder) SetUrl(u string) *ReqBuilder {
 	r.ReqQ.Url = &u
 	return r
 }
 func (r *ReqBuilder) SetHeaders(h map[string]string) *ReqBuilder {
+	r.ReqQ.Headers = h
+	return r
+}
+func (r *ReqBuilder) SetTimeOut(h int) *ReqBuilder {
 	r.ReqQ.Headers = h
 	return r
 }
@@ -30,6 +44,10 @@ func (r *ReqBuilder) SetJson(j interface{}) *ReqBuilder {
 	return r
 }
 func (r *ReqBuilder) Do() (*http.Response, error) {
+	var client *http.Client
+	if r.ReqQ.Client == nil {
+		client = &http.Client{}
+	}
 	var (
 		h     *http.Response
 		ebody *bytes.Reader
@@ -60,7 +78,6 @@ func (r *ReqBuilder) Do() (*http.Response, error) {
 			req.Header.Set(k, v)
 		}
 	}
-	client := &http.Client{}
 	client.Transport = &http.Transport{
 		TLSClientConfig: tlsConfig,
 	}
