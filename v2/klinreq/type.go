@@ -10,7 +10,7 @@ type ReqQ struct {
 	Method   *string
 	NoVerify bool
 	Json     *interface{}
-	Client   *http.Cilent
+	Client   *http.Client
 }
 type ReqBuilder struct {
 	ReqQ
