@@ -25,7 +25,7 @@ func (r *ReqBuilder) SetUrl(b string) *ReqBuilder {
 	return r
 }
 func (r *ReqBuilder) SetBodyBytes(b []byte) *ReqBuilder {
-	r.ReqQ.BodyBytes = &b
+	r.ReqQ.BodyBytes = b
 	return r
 }
 func (r *ReqBuilder) SetHeaders(h map[string]string) *ReqBuilder {
