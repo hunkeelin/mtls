@@ -5,12 +5,13 @@ import (
 )
 
 type ReqQ struct {
-	Url      *string
-	Headers  map[string]string
-	Method   *string
-	NoVerify bool
-	Json     *interface{}
-	Client   *http.Client
+	Url       *string
+	Headers   map[string]string
+	Method    *string
+	NoVerify  bool
+	BodyBytes []byte
+	Json      *interface{}
+	Client    *http.Client
 }
 type ReqBuilder struct {
 	ReqQ
