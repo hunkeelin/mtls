@@ -21,11 +21,11 @@ func New() ReqBuilder {
 	}
 }
 func (r *ReqBuilder) SetUrl(b string) *ReqBuilder {
-	r.ReqQ.BodyBytes = &u
+	r.ReqQ.Url = &b
 	return r
 }
 func (r *ReqBuilder) SetBodyBytes(b []byte) *ReqBuilder {
-	r.ReqQ.Url = &b
+	r.ReqQ.BodyBytes = &b
 	return r
 }
 func (r *ReqBuilder) SetHeaders(h map[string]string) *ReqBuilder {
@@ -42,7 +42,7 @@ func (r *ReqBuilder) SetMethod(m string) *ReqBuilder {
 }
 func (r *ReqBuilder) NoVerify() *ReqBuilder {
 	r.ReqQ.NoVerify = true
-	return b
+	return r
 }
 func (r *ReqBuilder) SetJson(j interface{}) *ReqBuilder {
 	r.ReqQ.Json = &j
