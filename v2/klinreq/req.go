@@ -20,6 +20,20 @@ func New() ReqBuilder {
 		ReqQ: r,
 	}
 }
+func Newv2(c *http.Client) ReqBuilder {
+	var client *http.Client
+	if c != nil {
+		client = &http.Client{}
+	} else {
+		client = c
+	}
+	r := ReqQ{
+		Client: client,
+	}
+	return ReqBuilder{
+		ReqQ: r,
+	}
+}
 func (r *ReqBuilder) SetUrl(b string) *ReqBuilder {
 	r.ReqQ.Url = &b
 	return r
