@@ -22,7 +22,7 @@ func New() ReqBuilder {
 }
 func Newv2(c *http.Client) ReqBuilder {
 	var client *http.Client
-	if c != nil {
+	if c == nil {
 		client = &http.Client{}
 	} else {
 		client = c
