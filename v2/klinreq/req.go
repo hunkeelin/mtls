@@ -47,7 +47,8 @@ func (r *ReqBuilder) SetHeaders(h map[string]string) *ReqBuilder {
 	return r
 }
 func (r *ReqBuilder) SetTimeOut(h int) *ReqBuilder {
-	r.ReqQ.Client.Timeout = time.Duration(h) * time.Second
+	//	r.ReqQ.Client.Timeout = time.Duration(h) * time.Second
+	r.ReqQ.TimeOut = h
 	return r
 }
 func (r *ReqBuilder) SetMethod(m string) *ReqBuilder {
@@ -107,6 +108,8 @@ func (r *ReqBuilder) Do() (*http.Response, error) {
 	client.Transport = &http.Transport{
 		TLSClientConfig: tlsConfig,
 	}
+	// Set Timeout
+	client.Timeout = r.ReqQ.TimeOut
 	h, err = client.Do(req)
 	if err != nil {
 		return h, err

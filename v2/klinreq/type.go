@@ -8,6 +8,7 @@ type ReqQ struct {
 	Url       *string
 	Headers   map[string]string
 	Method    *string
+	TimeOut   int
 	NoVerify  bool
 	BodyBytes []byte
 	Json      *interface{}
