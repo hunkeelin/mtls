@@ -109,7 +109,7 @@ func (r *ReqBuilder) Do() (*http.Response, error) {
 		TLSClientConfig: tlsConfig,
 	}
 	// Set Timeout
-	client.Timeout = r.ReqQ.TimeOut
+	client.Timeout = time.Duration(r.ReqQ.TimeOut) * time.Second
 	h, err = client.Do(req)
 	if err != nil {
 		return h, err
