@@ -46,6 +46,10 @@ func (r *ReqBuilder) SetHeaders(h map[string]string) *ReqBuilder {
 	r.ReqQ.Headers = h
 	return r
 }
+func (r *ReqBuilder) SetRawHeaders(h http.Header) *ReqBuilder {
+	r.ReqQ.RawHeaders = h
+	return r
+}
 func (r *ReqBuilder) SetTimeOut(h int) *ReqBuilder {
 	//	r.ReqQ.Client.Timeout = time.Duration(h) * time.Second
 	r.ReqQ.TimeOut = h
@@ -105,6 +109,10 @@ func (r *ReqBuilder) Do() (*http.Response, error) {
 			req.Header.Set(k, v)
 		}
 	}
+	if r.ReqQ.RawHeaders != nil {
+		req.Header = r.ReqQ.RawHeaders
+	}
+
 	client.Transport = &http.Transport{
 		TLSClientConfig: tlsConfig,
 	}
