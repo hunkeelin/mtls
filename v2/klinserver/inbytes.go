@@ -4,7 +4,7 @@ import (
 	"errors"
 	"github.com/hunkeelin/SuperCAclient/lib"
 	"github.com/hunkeelin/klinutils"
-	"github.com/hunkeelin/pki"
+	"github.com/hunkeelin/pki/v1"
 )
 
 // The form to modify ServerConfig so it will take everything in bytes, this form is only useful when you have a SuperCA server up and running.
