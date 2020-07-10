@@ -4,7 +4,7 @@ import (
 	"errors"
 	"github.com/hunkeelin/SuperCAclient/lib"
 	"github.com/hunkeelin/klinutils"
-	"github.com/hunkeelin/pki"
+	"github.com/hunkeelin/pki/v1"
 )
 
 type InbytesForm struct {
